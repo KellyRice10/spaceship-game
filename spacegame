@@ -1,0 +1,133 @@
+----------------------------------------------------------------------------------------------------------------------------------------
+Player: 
+_____________________________________________________________________________________
+package spacegame;
+
+import java.awt.Rectangle;
+
+public class Player {
+
+	private Rectangle hitbox;
+
+	public Player(int x, int y) {
+		hitbox = new Rectangle(x, y, 50, 50);
+	}
+
+	public int getX() {
+		return hitbox.x;
+	}
+
+	public int getY() {
+		return hitbox.y;
+	}
+
+	public int getWidth() {
+		return hitbox.width;
+	}
+
+	public int getHeight() {
+		return hitbox.height;
+	}
+
+	public void setX(int x) {
+		hitbox.x = x;
+	}
+	
+	public void setTarget(int value) {
+		targetX += value;
+		if (targetX < 0) targetX = 0;
+		if (targetX > 350) targetX = 350;
+	}
+	
+	public void update(double deltaTime) {
+		if(targetX > hitbox.x) {
+			hitbox.x += deltaTime * speed;
+			if (hitbox.x > targetX) {
+				hitbox.x = targetX;
+			}
+		}
+		
+		if (targetX < hitbox.x) {
+			hitbox.x -=deltaTime * speed;
+			if(hitbox.x < targetX) {
+				hitbox.x = targetX;
+			}
+		}
+	}
+
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------
+SpaceGame:
+_____________________________________________________________________________________
+package spacegame;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+
+public class SpaceGame extends JComponent implements KeyListener {
+
+	public static void main(String[] args) {
+
+		SpaceGame game = new SpaceGame();
+
+		JFrame frame = new JFrame("Spacey");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		frame.setSize(400,800);
+
+		frame.addKeyListener(game);
+		frame.add(game);
+	}
+
+	Player player;
+	public SpaceGame() {
+		player = new Player(175, 725);
+	}
+
+	public void paintComponent(Graphics g) {
+		g.setColor(Color.red);
+		g.fillRect(player.getX(), player.getY(), player.getWidth(), height);
+	}
+
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		System.out.println(e.getKeyCode());
+
+		if(e.getKeyCode() == 37) {
+			player.setX(player.getX()-5);
+			if (player.getX() < 0) {
+				player.setX(0);
+			}
+		}
+		if(e.getKeyCode() == 39) {
+			player.setX(player.getX()+5);
+			if(player.getX() > 350) {
+				player.setX(350);
+			}
+		}
+		repaint();
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+----------------------------------------------------------------------------------------------------------------------------------------
